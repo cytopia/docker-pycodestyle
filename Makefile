@@ -52,7 +52,7 @@ _test_run:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing pep8 standard"
 	@echo "------------------------------------------------------------"
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests:/data $(IMAGE) pycodestyle test.py ; then \
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests:/data $(IMAGE) test.py ; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
