@@ -10,7 +10,7 @@
 > #### All awesome CI images
 >
 > [ansible](https://github.com/cytopia/docker-ansible) |
-> [ansible-lint](https://github.com/cytopia/docker-pycodestyle-lint) |
+> [ansible-lint](https://github.com/cytopia/docker-ansible-lint) |
 > [awesome-ci](https://github.com/cytopia/awesome-ci) |
 > [eslint](https://github.com/cytopia/docker-eslint) |
 > [jsonlint](https://github.com/cytopia/docker-jsonlint) |
