@@ -35,13 +35,13 @@ _test_version:
 				| sed 's/.*tag\///g' \
 		)"; \
 		echo "Testing for latest: $${LATEST}"; \
-		if ! docker run --rm $(IMAGE) pycodestyle --version | grep -E "^$${LATEST}$$"; then \
+		if ! docker run --rm $(IMAGE) --version | grep -E "^$${LATEST}$$"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
 	else \
 		echo "Testing for tag: $(TAG)"; \
-		if ! docker run --rm $(IMAGE) pycodestyle --version | grep -E "^$(TAG)"; then \
+		if ! docker run --rm $(IMAGE) --version | grep -E "^$(TAG)"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
