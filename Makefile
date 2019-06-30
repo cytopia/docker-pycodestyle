@@ -2,7 +2,7 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-.PHONY: build rebuild test _test_version _test_run tag pull login push enter
+.PHONY: build rebuild lint test _test_version _test_run tag pull login push enter
 
 CURRENT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
@@ -16,6 +16,14 @@ build:
 
 rebuild: pull
 	docker build --no-cache --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE) $(DIR)
+
+lint:
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-cr --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-crlf --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-single-newline --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-space --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8 --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8-bom --text --ignore '.git/,.github/,tests/' --path .
 
 test:
 	@$(MAKE) --no-print-directory _test_version
@@ -35,13 +43,13 @@ _test_version:
 				| sed 's/.*tag\///g' \
 		)"; \
 		echo "Testing for latest: $${LATEST}"; \
-		if ! docker run --rm $(IMAGE) pycodestyle --version | grep -E "^$${LATEST}$$"; then \
+		if ! docker run --rm $(IMAGE) --version | grep -E "^$${LATEST}$$"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
 	else \
 		echo "Testing for tag: $(TAG)"; \
-		if ! docker run --rm $(IMAGE) pycodestyle --version | grep -E "^$(TAG)"; then \
+		if ! docker run --rm $(IMAGE) --version | grep -E "^$(TAG)"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
